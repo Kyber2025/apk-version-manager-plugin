@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place this at: app/src/main/res/xml/file_paths.xml -->
+<!-- Allows FileProvider to share the downloaded APK with the package installer. -->
+<paths>
+    <!-- DownloadManager.Request.setDestinationInExternalFilesDir() saves here. -->
+    <external-files-path
+        name="downloads"
+        path="Download/" />
+
+    <!-- Some Android versions report the path slightly differently. Belt and suspenders. -->
+    <external-path
+        name="external"
+        path="." />
+</paths>

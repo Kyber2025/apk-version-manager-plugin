@@ -1,0 +1,11 @@
+{
+  "name": "apk-version-manager",
+  "description": "Add APK distribution + Android auto-update to any project. Self-hosted, no Google Play required. Battle-tested in production.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Kyber2025"
+  },
+  "repository": "https://github.com/Kyber2025/apk-version-manager-plugin",
+  "homepage": "https://github.com/Kyber2025/apk-version-manager-plugin",
+  "license": "MIT"
+}

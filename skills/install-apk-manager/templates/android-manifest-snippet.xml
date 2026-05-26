@@ -1,0 +1,31 @@
+<!-- AndroidManifest.xml — snippets to merge into your existing manifest. -->
+<!-- Don't copy this whole file; copy the marked sections into your real AndroidManifest.xml. -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ╔══ ADD THESE PERMISSIONS (top of <manifest>) ═══════════════════════╗ -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Required on Android 8+ for in-app APK install -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- ╚════════════════════════════════════════════════════════════════════╝ -->
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher">
+
+        <!-- ╔══ ADD THIS PROVIDER inside <application> ══════════════════════╗ -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <!-- ╚════════════════════════════════════════════════════════════════╝ -->
+
+        <!-- Your existing <activity> tags, etc. -->
+
+    </application>
+</manifest>
