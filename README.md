@@ -29,7 +29,14 @@ When you install this plugin and invoke `/install-apk-manager` (or just ask Clau
 
 3. **Nginx snippet** for the `/apks/` route block (raises `client_max_body_size`, disables proxy buffering for large APK streaming).
 
-4. **Optional React admin page** with upload form, version list, QR code download links, delete buttons.
+4. **React admin page** (production-grade, [live demo](https://ai.applehappy.net/admin/apks)):
+   - Drag-target upload with client-side filename regex validation
+   - Per-package grouped table, "Latest" badge on highest version
+   - sha256 truncated display + copy-URL button + download link per row
+   - Delete with confirmation modal
+   - Auto-refresh every 30s so newly uploaded APKs (via scp / second tab) appear without manual reload
+   - Imports marked `// CUSTOMIZE:` for easy swap to any UI kit (Tailwind/shadcn/MUI/Chakra/etc) and any auth store (Zustand/Redux/Context)
+   - Minimal-deps fallback stubs included if your project doesn't have a design system yet
 
 5. **Docker-compose volume + env hint** so the backend container can see your host's APK directory.
 
@@ -63,8 +70,9 @@ Claude will survey your project layout, customize the templates (paths, package 
 
 The production deployment that this plugin's templates were extracted from:
 
-- **Manifest endpoint**: https://ai.applehappy.net/apks/manifest
-- **Sample APK**: https://ai.applehappy.net/apks/kyber-phone-proxy-v3.5.0.apk
+- **Admin UI**: https://ai.applehappy.net/admin/apks (admin login required)
+- **Manifest endpoint**: https://ai.applehappy.net/apks/manifest (public)
+- **Sample APK**: https://ai.applehappy.net/apks/kyber-phone-proxy-v3.5.0.apk (public)
 
 ```bash
 $ curl https://ai.applehappy.net/apks/manifest | jq .

@@ -39,7 +39,7 @@ Templates live in `./templates/`:
 | `android-fileprovider.xml` | `{android}/app/src/main/res/xml/file_paths.xml` | Required for install intent on Android 7+ |
 | `android-manifest-snippet.xml` | Snippet to merge into `AndroidManifest.xml` | Permissions + FileProvider declaration |
 | `nginx-snippet.conf` | `/etc/nginx/conf.d/<site>.conf` (manual) | If user uses nginx; raise client_max_body_size for uploads |
-| `admin-react-page.tsx` | `{frontend}/src/pages/admin/ApksAdminPage.tsx` (optional) | React admin UI with upload + version list + QR code |
+| `admin-react-page.tsx` | `{frontend}/src/pages/admin/AdminApksPage.tsx` | **Production-grade** React admin UI: drag-target upload with client-side filename validation, per-package grouped table with "Latest" badge, sha256, size, copy-URL, delete-with-confirmation modal, 30s auto-refresh. Extracted from a live deployment ([ai.applehappy.net/admin/apks](https://ai.applehappy.net/admin/apks)). Imports + auth source are clearly marked "CUSTOMIZE" for swap. |
 
 ## Procedure
 
@@ -106,9 +106,26 @@ Required Android changes:
 - In a top-level Activity (e.g. MainActivity) call `ApkUpdater.checkOnStart(this)` in onResume
 - Optionally start a WorkManager periodic check (described in the template's comments)
 
-### 6. Admin upload UI (optional)
+### 6. Admin upload UI (recommended)
 
-If user has a React admin area, offer `templates/admin-react-page.tsx`. Customize the API base URL + auth token source.
+**Strongly recommend installing the admin page** — without it, admin has to scp APKs by hand or use curl, which most admins won't remember a week later. The template is production-quality, not a sketch.
+
+If user has a React admin area:
+
+1. Copy `templates/admin-react-page.tsx` to their admin pages dir.
+2. Swap the imports marked `// CUSTOMIZE:` for the user's actual UI components:
+   - **Card/CardContent/CardHeader/Button/Modal/LoadingSpinner**: most projects have these. If not, the template's bottom has minimal-deps fallback stubs you can paste into a local file.
+   - **AppLayout**: their sidebar/header wrapper.
+   - **useAuthStore**: their JWT source. The template uses Zustand's `getState().token`. For Redux: `store.getState().auth.token`. For Context: read from a provider. For plain localStorage: `localStorage.getItem('auth_token')`.
+3. Add the route under their admin route guard (e.g. `<Route path="/admin/apks" element={<AdminRoute><AdminApksPage /></AdminRoute>} />`).
+4. Add a sidebar/nav entry: icon=`Package` from lucide, label="APK Manager".
+5. If user has i18n, add a sidebar.apks key with their language(s).
+6. Verify the page loads at `/admin/apks` after login and shows the manifest correctly.
+
+If user has no React/admin area, fall back to documenting curl + scp workflows.
+
+The page exists at this live URL for reference:
+[https://ai.applehappy.net/admin/apks](https://ai.applehappy.net/admin/apks)
 
 ### 7. Initial upload + smoke test
 
